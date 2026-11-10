@@ -7,7 +7,7 @@ Official web application and showcase portal for **Android Club at VIT Bhopal Un
 ## 🌐 Live Deployment & Project Links
 
 > **🚀 Live Deployed Version:** [https://andriod-club-site.netlify.app](https://andriod-club-site.netlify.app)  
-> *(If your Netlify site has a custom domain or slug, update this URL accordingly)*  
+
 > 
 > **📦 Source Code Repository:** [https://github.com/anmol11379-web/Andriod-Club-Site](https://github.com/anmol11379-web/Andriod-Club-Site)  
 > **⚡ Hosting Platform:** Netlify (Continuous Deployment via GitHub)
