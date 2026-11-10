@@ -4,21 +4,78 @@ Official web application and showcase portal for **Android Club at VIT Bhopal Un
 
 ---
 
+## 🌐 Live Deployment & Project Links
+
+> **🚀 Live Deployed Version:** [https://andriod-club-site.netlify.app](https://andriod-club-site.netlify.app)  
+> *(If your Netlify site has a custom domain or slug, update this URL accordingly)*  
+> 
+> **📦 Source Code Repository:** [https://github.com/anmol11379-web/Andriod-Club-Site](https://github.com/anmol11379-web/Andriod-Club-Site)  
+> **⚡ Hosting Platform:** Netlify (Continuous Deployment via GitHub)
+
+---
+
+## 💻 Setup & Installation Instructions
+
+Follow these step-by-step instructions to run the project locally on your machine:
+
+### 1. Prerequisites
+Ensure you have the following installed on your machine:
+- **Node.js**: v18.0.0 or higher ([Download Node.js](https://nodejs.org/))
+- **npm**: v9.0.0 or higher (comes bundled with Node.js)
+- **Git**: Installed and configured ([Download Git](https://git-scm.com/))
+
+### 2. Clone the Repository
+Open your terminal and clone the repository:
+```bash
+git clone https://github.com/anmol11379-web/Andriod-Club-Site.git
+cd Andriod-Club-Site
+```
+
+### 3. Install Dependencies
+Install all required project dependencies:
+```bash
+npm install
+```
+
+### 4. Run the Development Server
+Start the local development server with Hot Module Replacement (HMR):
+```bash
+npm run dev
+```
+Once started, open your browser and navigate to:
+```
+http://localhost:3000
+```
+
+### 5. Build for Production
+To generate a production-ready, minified build in the `dist/` directory:
+```bash
+npm run build
+```
+
+### 6. Preview Production Build Locally
+To test the production build locally before deploying:
+```bash
+npm run preview
+```
+
+---
+
 ## ⚡ Tech Stack
 
-- **Core:** [React 18](https://react.dev/) + [Vite 6](https://vitejs.dev/)
-- **Styling:** [Tailwind CSS 3](https://tailwindcss.com/) with custom dark cyber theme
-- **Smooth Scroll:** [Lenis](https://lenis.darkroom.engineering/) (60/120fps hardware acceleration)
+- **Framework:** [React 18](https://react.dev/) + [Vite 6](https://vitejs.dev/)
+- **Styling:** [Tailwind CSS 3](https://tailwindcss.com/) with custom cyber-brutalist dark theme
+- **Smooth Scroll:** [Lenis](https://lenis.darkroom.engineering/) (hardware-accelerated touch & desktop scroll momentum)
 - **Icons:** [Lucide React](https://lucide.dev/)
-- **Effects:** [Canvas Confetti](https://www.npmjs.com/package/canvas-confetti)
-- **Deployment:** [Netlify](https://www.netlify.com/) (configured via `netlify.toml` + `_redirects`)
+- **Micro-Interactions:** [Canvas Confetti](https://www.npmjs.com/package/canvas-confetti)
+- **Deployment & Routing:** [Netlify](https://www.netlify.com/) (configured via [`netlify.toml`](./netlify.toml) + [`public/_redirects`](./public/_redirects))
 
 ---
 
 ## 🚀 Key Features
 
 - **System Boot Intro Loader:** Cyber-telemetry boot ramp with seamless dual-shutter curtain opening animation.
-- **Hardware Phone Zoom Showcase:** Physics-damped (`requestAnimationFrame` LERP) scroll-pinned 3D device preview.
+- **Hardware Phone Zoom Showcase:** Hardware-accelerated (`requestAnimationFrame` LERP + direct GPU ref transforms) 3D device preview optimized for 120fps on mobile & Android devices.
 - **Collaborative Developer Cursors:** Live multi-track domain tags with interactive technical briefs.
 - **Domain & Project Hub:** Sourced from official repositories with category filters (Android Native, SDC, AI/ML, Cloud & IoT).
 - **Events & Hackathons:** Segmented timeline with live status pills and past competition archives.
@@ -63,7 +120,7 @@ Official web application and showcase portal for **Android Club at VIT Bhopal Un
 │   │   ├── Team.jsx             # Category-filtered core team directory
 │   │   ├── FAQ.jsx              # Interactive question accordion
 │   │   ├── RecruitmentChallenge.jsx # Application dossier
-│   │   ├── Contact.jsx          # Campus location & direct lead inquiry
+│   │   ├── Contact.jsx          # Campus info & direct lead inquiry
 │   │   └── FinalCTA.jsx         # Action prompt before footer
 │   ├── data/
 │   │   └── clubData.js          # Centralized data store (team, events, projects, info)
@@ -80,60 +137,31 @@ Official web application and showcase portal for **Android Club at VIT Bhopal Un
 
 ---
 
-## 💻 Getting Started
+## 🌐 Netlify Deployment Configuration
 
-### Prerequisites
-- **Node.js**: v18.0.0 or higher
-- **npm**: v9.0.0 or higher
+This repository includes continuous deployment configuration out of the box:
 
-### 1. Installation
-Clone the repository and install dependencies:
-```bash
-git clone https://github.com/anmol11379-web/Andriod-Club-Site.git
-cd Andriod-Club-Site
-npm install
-```
+- **[`netlify.toml`](./netlify.toml):**
+  ```toml
+  [build]
+    command = "npm run build"
+    publish = "dist"
 
-### 2. Local Development
-Start the local development server with Hot Module Replacement (HMR):
-```bash
-npm run dev
-```
-Navigate to `http://localhost:3000` in your browser.
+  [build.environment]
+    NODE_VERSION = "20"
 
-### 3. Production Build
-Generate optimized static bundles into the `dist/` folder:
-```bash
-npm run build
-```
-
-### 4. Local Production Preview
-Preview the production build locally:
-```bash
-npm run preview
-```
+  [[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
+  ```
+- **[`public/_redirects`](./public/_redirects):** Guarantees zero 404s on page refresh.
 
 ---
 
-## 🌐 Deployment Instructions
+## 📝 Managing & Updating Content
 
-### Deploy to Netlify (Recommended)
-This repository includes a production-ready [`netlify.toml`](./netlify.toml) and [`public/_redirects`](./public/_redirects) for instant deployment:
-
-1. Push your repository to GitHub.
-2. Log in to [Netlify](https://www.netlify.com/) and click **"Add new site"** > **"Import an existing project"**.
-3. Select your GitHub repository (`Andriod-Club-Site`).
-4. Netlify will automatically detect the build settings from `netlify.toml`:
-   - **Base directory:** *(leave blank / root)*
-   - **Build command:** `npm run build`
-   - **Publish directory:** `dist`
-5. Click **"Deploy site"**.
-
----
-
-## 📝 Updating Club Content
-
-All text, team members, hackathons, open-source projects, and contact information are managed centrally in:
+All text copy, team members, hackathons, open-source projects, and contact information are managed centrally in:
 ```
 src/data/clubData.js
 ```
@@ -149,7 +177,7 @@ src/data/clubData.js
 
 ---
 
-## 📜 License & Chapter Affiliation
+## 📜 Chapter & Licensing
 
 Developed and maintained by **Android Club, VIT Bhopal University**.  
-Built for the developer community.
+Built for the global developer ecosystem.
