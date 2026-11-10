@@ -23,6 +23,17 @@ import WebsiteIntroLoader from './components/WebsiteIntroLoader';
 
 export default function App() {
   useEffect(() => {
+    // 0. Disable browser auto-scroll restoration so page always reloads at top
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
+    // If page reloaded with an anchor hash in URL, clear it so browser doesn't jump down
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+
     // Detect touch device for natural Android & mobile touch acceleration
     const isTouch = typeof window !== 'undefined' && (
       'ontouchstart' in window || 
@@ -41,6 +52,9 @@ export default function App() {
       touchMultiplier: 1.0,
     });
 
+    // Ensure Lenis starts locked at the very top (y = 0)
+    lenis.scrollTo(0, { immediate: true });
+
     let rafId;
     function raf(time) {
       lenis.raf(time);
@@ -48,6 +62,12 @@ export default function App() {
     }
     rafId = requestAnimationFrame(raf);
     window.lenis = lenis;
+
+    // Reset to top when leaving / refreshing
+    const handleBeforeUnload = () => {
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
 
     // 2. Global smooth ripple animation on button click
     const handleButtonClick = (e) => {
@@ -87,6 +107,7 @@ export default function App() {
       lenis.destroy();
       window.lenis = null;
       window.removeEventListener('click', handleButtonClick);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []);
 
