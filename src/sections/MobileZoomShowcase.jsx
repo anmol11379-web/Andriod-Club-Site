@@ -1,49 +1,151 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown, Sparkles, Terminal, ArrowUpRight, Shield, CheckCircle2 } from 'lucide-react';
-import { CLUB_INFO } from '../data/clubData';
+import { ChevronDown } from 'lucide-react';
 
 export default function MobileZoomShowcase() {
   const containerRef = useRef(null);
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0);
-  const [smoothProgress, setSmoothProgress] = useState(0);
+  
+  // Direct DOM refs for 120fps hardware-accelerated transforms without React re-renders
+  const phoneRef = useRef(null);
+  const phoneChassisRef = useRef(null);
+  const initialTextRef = useRef(null);
+  const quoteRef = useRef(null);
+  const nextHeadingRef = useRef(null);
+  const glowRef = useRef(null);
+  const percentRef = useRef(null);
+  const stepDotsRef = useRef([]);
 
-  // High-performance pinned RAF scroll loop with silky LERP smoothing (0.20 damping)
+  const [currentStep, setCurrentStep] = useState(0);
+
+  // Gallery rail step targets
+  const gallerySteps = [
+    { label: 'EXPLORE', target: 0.0 },
+    { label: 'ZOOM', target: 0.32 },
+    { label: 'ABOUT', target: 0.65 }
+  ];
+
   useEffect(() => {
     let animId;
     let isMounted = true;
+    let lastStep = -1;
 
+    // Fast, reflow-free scroll measurement using cached offset
     const onScroll = () => {
       if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const containerTop = containerRef.current.offsetTop;
+      const containerHeight = containerRef.current.offsetHeight;
       const windowHeight = window.innerHeight;
-      const containerHeight = rect.height;
-      
-      // Calculate scroll progress exclusively while section is pinned to top of viewport
-      // rect.top = 0: top of section locks to top of viewport (progress = 0)
-      // rect.top = -(containerHeight - windowHeight): bottom of section reaches bottom of viewport (progress = 1)
       const scrollableDistance = containerHeight - windowHeight;
       if (scrollableDistance <= 0) return;
-      
-      const rawProgress = Math.min(Math.max(-rect.top / scrollableDistance, 0), 1);
-      targetProgressRef.current = rawProgress;
+
+      const rawProgress = (scrollTop - containerTop) / scrollableDistance;
+      targetProgressRef.current = Math.min(Math.max(rawProgress, 0), 1);
     };
 
+    // 120fps direct GPU transform update loop (No React state changes per frame!)
     const updateLoop = () => {
       if (!isMounted) return;
+
       const diff = targetProgressRef.current - currentProgressRef.current;
-      if (Math.abs(diff) > 0.0001) {
-        currentProgressRef.current += diff * 0.12;
-        setSmoothProgress(currentProgressRef.current);
-      } else if (currentProgressRef.current !== targetProgressRef.current) {
+      if (Math.abs(diff) > 0.0002) {
+        currentProgressRef.current += diff * 0.16; // Snappy, responsive damping
+      } else {
         currentProgressRef.current = targetProgressRef.current;
-        setSmoothProgress(targetProgressRef.current);
       }
+
+      const p = currentProgressRef.current;
+
+      // 1. Initial text opacity & translate (0.00 -> 0.15)
+      let initialTextOpacity = 1;
+      if (p > 0) {
+        const t = Math.min(p / 0.15, 1);
+        initialTextOpacity = 1 - (t * t * (3 - 2 * t));
+      }
+      const initialTextTranslateX = (1 - initialTextOpacity) * 30;
+
+      if (initialTextRef.current) {
+        initialTextRef.current.style.opacity = initialTextOpacity;
+        initialTextRef.current.style.transform = `translate3d(-${initialTextTranslateX}px, 0, 0)`;
+      }
+
+      if (quoteRef.current) {
+        quoteRef.current.style.opacity = initialTextOpacity;
+        quoteRef.current.style.transform = `translate3d(${initialTextTranslateX}px, 0, 0)`;
+      }
+
+      // 2. Phone scale: zooms from 1.0x to 5.2x (0.00 -> 0.32)
+      let phoneScale = 1.0;
+      if (p > 0) {
+        const zoomRatio = Math.min(p / 0.32, 1.0);
+        const ease = 1 - Math.pow(1 - zoomRatio, 3);
+        phoneScale = 1.0 + ease * 4.2;
+      }
+
+      // Phone fades out as zoom completes (0.24 -> 0.32)
+      let phoneOpacity = 1;
+      if (p > 0.24) {
+        const t = Math.min((p - 0.24) / 0.08, 1);
+        phoneOpacity = 1 - (t * t * (3 - 2 * t));
+      }
+
+      if (phoneRef.current) {
+        phoneRef.current.style.transform = `scale3d(${phoneScale}, ${phoneScale}, 1) translateZ(0)`;
+        phoneRef.current.style.opacity = phoneOpacity;
+      }
+
+      // 3. Chassis dissolve (0.14 -> 0.28)
+      let chassisOpacity = 1;
+      if (p > 0.14) {
+        const t = Math.min((p - 0.14) / 0.14, 1);
+        chassisOpacity = 1 - (t * t * (3 - 2 * t));
+      }
+      if (phoneChassisRef.current) {
+        phoneChassisRef.current.style.opacity = chassisOpacity;
+      }
+
+      // 4. Next heading fade (appears 0.28 -> 0.80, fades out > 0.80)
+      let nextHeadingOpacity = 0;
+      if (p >= 0.28 && p <= 0.80) {
+        const t = Math.min((p - 0.28) / 0.07, 1);
+        nextHeadingOpacity = t * t * (3 - 2 * t);
+      } else if (p > 0.80) {
+        const t = Math.min((p - 0.80) / 0.16, 1);
+        nextHeadingOpacity = 1 - (t * t * (3 - 2 * t));
+      }
+
+      if (nextHeadingRef.current) {
+        nextHeadingRef.current.style.opacity = nextHeadingOpacity;
+      }
+
+      // 5. Ambient glow scale
+      if (glowRef.current) {
+        const glowScale = 1 + (phoneScale > 1 ? (phoneScale - 1) * 0.25 : 0);
+        glowRef.current.style.transform = `scale3d(${glowScale}, ${glowScale}, 1) translateZ(0)`;
+        glowRef.current.style.opacity = 0.35 + nextHeadingOpacity * 0.45;
+      }
+
+      // 6. Rail percentage text
+      if (percentRef.current) {
+        percentRef.current.textContent = `${Math.round(p * 100)}%`;
+      }
+
+      // 7. Update step indicator dot ONLY when step index actually changes (0, 1, or 2)
+      const stepIdx = p < 0.15 ? 0 : p < 0.40 ? 1 : 2;
+      if (stepIdx !== lastStep) {
+        lastStep = stepIdx;
+        setCurrentStep(stepIdx);
+      }
+
       animId = requestAnimationFrame(updateLoop);
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll, { passive: true });
+    if (window.lenis) {
+      window.lenis.on('scroll', onScroll);
+    }
     onScroll();
     animId = requestAnimationFrame(updateLoop);
 
@@ -51,93 +153,25 @@ export default function MobileZoomShowcase() {
       isMounted = false;
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
+      if (window.lenis) {
+        window.lenis.off('scroll', onScroll);
+      }
       cancelAnimationFrame(animId);
     };
   }, []);
 
-  // =========================================================================
-  // USER-REQUESTED PACING & CHOREOGRAPHY:
-  // 1. AT START (p = 0.0):
-  //    Screen matches user screenshot: phone in center, "Explore the Android"
-  //    text and quote visible.
-  // 2. ON SCROLL -> IMMEDIATE ZOOM (p: 0.00 -> 0.32):
-  //    Mobile zooms from 1.0x to 5.5x as user scrolls towards 32%.
-  //    Initial text quickly fades out (0.00 -> 0.12).
-  // 3. AT 32% SCROLL:
-  //    Mobile fades out (0.26 -> 0.32).
-  //    Next heading appears RIGHT AT 32% dead-center in front of user (not up, not down).
-  // 4. HEADING READABLE & FADES OUT TO NEXT SECTION (p: 0.34 -> 0.95):
-  //    Heading is clearly readable in front of user (0.34 -> 0.78).
-  //    Then fades out smoothly (0.78 -> 0.95) as user scrolls into #about!
-  // =========================================================================
-
-  // Initial text fades out smoothly as zoom begins (0.00 -> 0.15)
-  let initialTextOpacity = 1;
-  if (smoothProgress > 0) {
-    const t = Math.min(smoothProgress / 0.15, 1);
-    initialTextOpacity = 1 - (t * t * (3 - 2 * t)); // buttery smoothstep
-  }
-  const initialTextTranslateX = (1 - initialTextOpacity) * 35;
-
-  // Phone scale: zooms from 1.0x to 5.5x smoothly by 32% scroll (0.00 -> 0.32)
-  let phoneScale = 1.0;
-  if (smoothProgress > 0) {
-    const zoomRatio = Math.min(smoothProgress / 0.32, 1.0);
-    // Smooth cubic ease-out for silky expansion
-    const ease = 1 - Math.pow(1 - zoomRatio, 3);
-    phoneScale = 1.0 + ease * 4.5;
-  }
-
-  // Mobile disappears in a buttery fade as it finishes zooming (0.24 -> 0.32)
-  let phoneOpacity = 1;
-  if (smoothProgress > 0.24) {
-    const t = Math.min((smoothProgress - 0.24) / 0.08, 1);
-    phoneOpacity = 1 - (t * t * (3 - 2 * t));
-  }
-
-  // Phone chassis dissolves smoothly between 0.14 and 0.28
-  let chassisOpacity = 1;
-  if (smoothProgress > 0.14) {
-    const t = Math.min((smoothProgress - 0.14) / 0.14, 1);
-    chassisOpacity = 1 - (t * t * (3 - 2 * t));
-  }
-
-  // Inner phone content fades out between 0.10 and 0.24
-  let innerContentOpacity = 1;
-  if (smoothProgress > 0.10) {
-    const t = Math.min((smoothProgress - 0.10) / 0.14, 1);
-    innerContentOpacity = 1 - (t * t * (3 - 2 * t));
-  }
-
-  // Next heading appears right at 32% scroll with smoothstep fade, holds, then fades out into #about
-  let nextHeadingOpacity = 0;
-  if (smoothProgress >= 0.28 && smoothProgress <= 0.80) {
-    const t = Math.min((smoothProgress - 0.28) / 0.07, 1);
-    nextHeadingOpacity = t * t * (3 - 2 * t); // buttery smooth fade-in
-  } else if (smoothProgress > 0.80) {
-    const t = Math.min((smoothProgress - 0.80) / 0.16, 1);
-    nextHeadingOpacity = 1 - (t * t * (3 - 2 * t)); // buttery smooth fade-out
-  }
-
-  // Gallery rail step computation
-  const gallerySteps = [
-    { label: 'EXPLORE', target: 0.0 },
-    { label: 'ZOOM', target: 0.32 },
-    { label: 'ABOUT', target: 0.65 }
-  ];
-  const currentStep = smoothProgress < 0.15 ? 0 : smoothProgress < 0.40 ? 1 : 2;
-
   const scrollToStep = (target) => {
     if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const containerTop = containerRef.current.offsetTop;
+    const containerHeight = containerRef.current.offsetHeight;
     const windowHeight = window.innerHeight;
-    const containerTop = rect.top + scrollTop;
-    const scrollableDistance = rect.height - windowHeight;
+    const scrollableDistance = containerHeight - windowHeight;
     const targetScroll = containerTop + scrollableDistance * target;
     const targetY = Math.max(targetScroll, 0);
+
     if (window.lenis) {
-      window.lenis.scrollTo(targetY, { duration: 1.2 });
+      window.lenis.scrollTo(targetY, { duration: 0.9 });
     } else {
       window.scrollTo({
         top: targetY,
@@ -149,42 +183,28 @@ export default function MobileZoomShowcase() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-[230vh] sm:h-[250vh] bg-[#0A090F] text-white"
+      className="relative w-full h-[220vh] sm:h-[240vh] bg-[#0A090F] text-white"
     >
       {/* Sticky Fullscreen Canvas Viewport */}
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
-        {/* Background Grid Lines matching androidclub.tech */}
+        {/* Background Grid Lines */}
         <div className="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none" />
         <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-neutral-800/40 -translate-x-1/2 pointer-events-none hidden md:block" />
-        <div className="absolute left-1/4 top-0 bottom-0 w-[1px] bg-neutral-900/30 pointer-events-none hidden lg:block" />
-        <div className="absolute right-1/4 top-0 bottom-0 w-[1px] bg-neutral-900/30 pointer-events-none hidden lg:block" />
 
-        {/* Dynamic Ambient Radial Glow */}
+        {/* Ambient Radial Glow (Optimized for Mobile GPU fill-rate) */}
         <div
-          className="absolute w-[600px] h-[600px] rounded-full bg-[#3DDC84]/15 blur-[150px] pointer-events-none transition-transform duration-500"
-          style={{
-            transform: `scale(${1 + (phoneScale > 1 ? (phoneScale - 1) * 0.3 : 0)})`,
-            opacity: 0.4 + nextHeadingOpacity * 0.5
-          }}
-        />
-
-        {/* Cyber Cyan Accent Glow */}
-        <div
-          className="absolute w-[450px] h-[450px] rounded-full bg-[#00F0FF]/10 blur-[140px] pointer-events-none -translate-x-56"
-          style={{ opacity: 0.2 + nextHeadingOpacity * 0.5 }}
+          ref={glowRef}
+          className="absolute w-[360px] h-[360px] sm:w-[500px] sm:h-[500px] rounded-full bg-[#3DDC84]/15 blur-3xl sm:blur-[120px] pointer-events-none will-change-transform"
+          style={{ transform: 'translateZ(0)' }}
         />
 
         {/* ========================================================= */}
         {/* 1. "Explore the Android Community" (LEFT FLANK)            */}
-        {/* Held 100% visible throughout reading zone so user can read */}
         {/* ========================================================= */}
         <div
-          className="absolute left-4 sm:left-12 md:left-20 top-16 sm:top-24 md:top-28 z-20 max-w-[280px] sm:max-w-sm md:max-w-md pointer-events-none"
-          style={{
-            opacity: initialTextOpacity,
-            transform: `translate3d(-${initialTextTranslateX}px, 0, 0)`,
-            willChange: 'transform, opacity'
-          }}
+          ref={initialTextRef}
+          className="absolute left-4 sm:left-12 md:left-20 top-16 sm:top-24 md:top-28 z-20 max-w-[280px] sm:max-w-sm md:max-w-md pointer-events-none will-change-transform"
+          style={{ transform: 'translateZ(0)' }}
         >
           {/* Tech Double Dots + Tag */}
           <div className="flex items-center gap-1.5 mb-2 sm:mb-3">
@@ -215,9 +235,6 @@ export default function MobileZoomShowcase() {
             <span className="font-mono text-[9px] sm:text-[10px] text-[#00F0FF] bg-[#14141E] px-2 py-0.5 sm:px-2.5 sm:py-1 border border-[#232332]">
               KOTLIN FIRST
             </span>
-            <span className="font-mono text-[9px] sm:text-[10px] text-[#3DDC84] bg-[#14141E] px-2 py-0.5 sm:px-2.5 sm:py-1 border border-[#232332] hidden sm:inline-block">
-              OPEN ECOSYSTEM
-            </span>
           </div>
         </div>
 
@@ -225,12 +242,9 @@ export default function MobileZoomShowcase() {
         {/* 2. Community Quote Callout (RIGHT FLANK)                  */}
         {/* ========================================================= */}
         <div
-          className="absolute right-6 sm:right-12 md:right-24 bottom-24 sm:bottom-32 z-20 max-w-xs md:max-w-sm text-right pointer-events-none hidden sm:block"
-          style={{
-            opacity: initialTextOpacity,
-            transform: `translate3d(${initialTextTranslateX}px, 0, 0)`,
-            willChange: 'transform, opacity'
-          }}
+          ref={quoteRef}
+          className="absolute right-6 sm:right-12 md:right-24 bottom-24 sm:bottom-32 z-20 max-w-xs md:max-w-sm text-right pointer-events-none hidden sm:block will-change-transform"
+          style={{ transform: 'translateZ(0)' }}
         >
           <div className="border-r-2 border-[#00F0FF]/60 pr-4 py-1">
             <p className="font-sans text-[14px] md:text-[16px] text-[#D4D4D8] leading-relaxed font-medium">
@@ -248,93 +262,61 @@ export default function MobileZoomShowcase() {
         </div>
 
         {/* ========================================================= */}
-        {/* 3. CENTER FOCAL ELEMENT: PHONE ZOOMING IN TO WHOLE SCREEN */}
-        {/* Holds at 1.0x during reading zone, then zooms to 5.4x      */}
-        {/* Mobile disappears in fade way as it finishes zooming in   */}
+        {/* 3. CENTER FOCAL ELEMENT: HARDWARE-ACCELERATED PHONE ZOOM  */}
         {/* ========================================================= */}
         <div
-          className="relative z-20 select-none pointer-events-none"
+          ref={phoneRef}
+          className="relative z-20 select-none pointer-events-none will-change-transform"
           style={{
-            transform: `scale(${phoneScale}) translate3d(0, 0, 0)`,
             transformOrigin: 'center center',
-            opacity: phoneOpacity,
-            willChange: 'transform, opacity'
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden'
           }}
         >
-          {/* Cyber bracket accents around phone */}
+          {/* Phone Hardware Chassis */}
           <div 
-            className="hidden sm:block absolute -top-3 -left-3 w-6 h-6 border-t-2 border-l-2 border-[#3DDC84]/60 transition-opacity duration-300"
-            style={{ opacity: chassisOpacity }}
-          />
-          <div 
-            className="hidden sm:block absolute -top-3 -right-3 w-6 h-6 border-t-2 border-r-2 border-[#3DDC84]/60 transition-opacity duration-300"
-            style={{ opacity: chassisOpacity }}
-          />
-          <div 
-            className="hidden sm:block absolute -bottom-3 -left-3 w-6 h-6 border-b-2 border-l-2 border-[#3DDC84]/60 transition-opacity duration-300"
-            style={{ opacity: chassisOpacity }}
-          />
-          <div 
-            className="hidden sm:block absolute -bottom-3 -right-3 w-6 h-6 border-b-2 border-r-2 border-[#3DDC84]/60 transition-opacity duration-300"
-            style={{ opacity: chassisOpacity }}
-          />
-
-          {/* Phone Hardware Chassis (dissolves as screen envelops viewport) */}
-          <div 
-            className="relative w-[230px] sm:w-[290px] md:w-[340px] aspect-[9/19] bg-[#0c0c14] rounded-[42px] sm:rounded-[48px] p-2.5 sm:p-3.5 border-[2.5px] sm:border-[3px] border-[#2c2c3d] shadow-[0_30px_90px_rgba(0,0,0,0.95)]"
-            style={{
-              opacity: chassisOpacity,
-              willChange: 'opacity'
-            }}
+            ref={phoneChassisRef}
+            className="relative w-[220px] sm:w-[280px] md:w-[320px] aspect-[9/19] bg-[#0c0c14] rounded-[38px] sm:rounded-[46px] p-2.5 sm:p-3.5 border-[2px] sm:border-[3px] border-[#2c2c3d] shadow-2xl sm:shadow-[0_25px_80px_rgba(0,0,0,0.9)]"
+            style={{ transform: 'translateZ(0)' }}
           >
-            {/* Outer Metallic Rim Highlight */}
-            <div className="absolute inset-0 rounded-[46px] border border-white/10 pointer-events-none" />
-
-            {/* Antenna lines */}
-            <div className="absolute top-16 -left-[3px] w-[3px] h-6 bg-[#3DDC84]/50" />
-            <div className="absolute top-44 -right-[3px] w-[3px] h-10 bg-[#00F0FF]/50" />
+            {/* Outer Rim Highlight */}
+            <div className="absolute inset-0 rounded-[36px] sm:rounded-[44px] border border-white/10 pointer-events-none" />
 
             {/* Inner Screen Display */}
-            <div className="relative w-full h-full bg-[#050508] rounded-[36px] overflow-hidden border border-[#1f1f2e] flex flex-col justify-between">
+            <div className="relative w-full h-full bg-[#050508] rounded-[30px] sm:rounded-[36px] overflow-hidden border border-[#1f1f2e] flex flex-col justify-between">
               {/* Status Bar */}
-              <div 
-                className="flex items-center justify-between px-5 pt-3 pb-1 text-[9px] font-mono text-[#888899] z-20"
-                style={{ opacity: innerContentOpacity }}
-              >
+              <div className="flex items-center justify-between px-4 pt-2.5 pb-1 text-[9px] font-mono text-[#888899] z-20">
                 <span className="font-bold text-white tracking-wider">13:37</span>
-                {/* Punch Hole Camera */}
-                <div className="w-3.5 h-3.5 bg-black rounded-full border border-[#222] flex items-center justify-center">
-                  <div className="w-1.5 h-1.5 bg-[#091114] rounded-full" />
+                <div className="w-3 h-3 bg-black rounded-full border border-[#222] flex items-center justify-center">
+                  <div className="w-1 h-1 bg-[#091114] rounded-full" />
                 </div>
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1">
                   <span className="text-[#3DDC84]">5G</span>
-                  <span className="w-2.5 h-1.5 border border-[#3DDC84] rounded-sm bg-[#3DDC84]" />
+                  <span className="w-2 h-1.5 border border-[#3DDC84] rounded-sm bg-[#3DDC84]" />
                 </div>
               </div>
 
               {/* Inside Screen Content */}
-              <div 
-                className="flex-1 flex flex-col items-center justify-center text-center px-4 py-4"
-                style={{ opacity: innerContentOpacity }}
-              >
+              <div className="flex-1 flex flex-col items-center justify-center text-center px-3 py-2">
                 {/* Glowing Android Robot Logo */}
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 mb-4 flex items-center justify-center">
+                <div className="relative w-14 h-14 sm:w-16 sm:h-16 mb-3 flex items-center justify-center">
                   <div className="absolute inset-0 rounded-full bg-[#3DDC84]/20 blur-md animate-pulse" />
                   <img
                     src="/Logo.png"
                     alt="Android Robot"
-                    className="w-14 h-14 sm:w-16 sm:h-16 object-contain relative z-10 drop-shadow-[0_0_15px_#3DDC84]"
+                    className="w-12 h-12 sm:w-14 sm:h-14 object-contain relative z-10"
                   />
                 </div>
 
-                <div className="font-mono text-[9px] sm:text-[10px] text-[#3DDC84] tracking-[2px] font-bold uppercase mb-1">
+                <div className="font-mono text-[9px] text-[#3DDC84] tracking-[2px] font-bold uppercase mb-1">
                   EXPLORE MORE ABOUT
                 </div>
-                <h3 className="font-grotesk text-[16px] sm:text-[18px] font-bold text-white tracking-tight mb-2">
+                <h3 className="font-grotesk text-[15px] sm:text-[17px] font-bold text-white tracking-tight mb-2">
                   THE ANDROID CLUB
                 </h3>
 
-                <div className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#14141E] border border-[#2d2d40] text-[9px] font-mono text-[#A1A1AA] mb-4">
+                <div className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#14141E] border border-[#2d2d40] text-[8px] sm:text-[9px] font-mono text-[#A1A1AA] mb-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#3DDC84] animate-ping" />
                   <span>AC-OS 15.0 • VIT BHOPAL</span>
                 </div>
@@ -346,11 +328,8 @@ export default function MobileZoomShowcase() {
               </div>
 
               {/* Bottom Home Indicator */}
-              <div 
-                className="pb-2.5 pt-1 flex justify-center"
-                style={{ opacity: innerContentOpacity }}
-              >
-                <div className="w-24 h-1 bg-[#2e2e42] rounded-full" />
+              <div className="pb-2 pt-1 flex justify-center">
+                <div className="w-20 sm:w-24 h-1 bg-[#2e2e42] rounded-full" />
               </div>
             </div>
           </div>
@@ -358,14 +337,11 @@ export default function MobileZoomShowcase() {
 
         {/* ========================================================= */}
         {/* 4. BLENDED NEXT HEADING: APPEARS AT 32% SCROLL            */}
-        {/* Moved down cleanly in between the green & black space      */}
         {/* ========================================================= */}
         <div
-          className="absolute inset-x-0 top-[42%] sm:top-[44%] md:top-[46%] z-40 px-4 sm:px-6 md:px-12 pointer-events-none"
-          style={{
-            opacity: nextHeadingOpacity,
-            willChange: 'opacity'
-          }}
+          ref={nextHeadingRef}
+          className="absolute inset-x-0 top-[36%] sm:top-[42%] md:top-[46%] z-40 px-4 sm:px-6 md:px-12 pointer-events-none will-change-transform"
+          style={{ transform: 'translateZ(0)', opacity: 0 }}
         >
           <div className="max-w-[1280px] mx-auto w-full flex flex-col items-start text-left">
             {/* Tag Badge */}
@@ -377,7 +353,7 @@ export default function MobileZoomShowcase() {
             </div>
 
             {/* Display Heading */}
-            <h2 className="font-grotesk text-[24px] sm:text-[34px] md:text-[44px] font-bold text-[#F5F5F0] tracking-[-1px] leading-[1.05] mb-2 sm:mb-2.5">
+            <h2 className="font-grotesk text-[22px] sm:text-[34px] md:text-[44px] font-bold text-[#F5F5F0] tracking-[-1px] leading-[1.08] mb-2 sm:mb-2.5">
               ENGINEERING IMPACT.
               <br />
               <span className="text-[#3DDC84]">
@@ -440,8 +416,8 @@ export default function MobileZoomShowcase() {
             );
           })}
 
-          <div className="mt-4 font-mono text-[9px] text-[#3DDC84]">
-            {Math.round(smoothProgress * 100)}%
+          <div ref={percentRef} className="mt-4 font-mono text-[9px] text-[#3DDC84]">
+            0%
           </div>
         </div>
       </div>
