@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Antennae -->
+  <line x1="31" y1="32" x2="19" y2="14" stroke="#3DDC84" stroke-width="6" stroke-linecap="round"/>
+  <line x1="69" y1="32" x2="81" y2="14" stroke="#3DDC84" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- Android Head Dome (Semicircle) -->
+  <path d="M 11 73 A 39 39 0 0 1 89 73 Z" fill="#3DDC84"/>
+  
+  <!-- Eyes -->
+  <circle cx="34" cy="54" r="3.8" fill="#0A090F"/>
+  <circle cx="66" cy="54" r="3.8" fill="#0A090F"/>
+</svg>
