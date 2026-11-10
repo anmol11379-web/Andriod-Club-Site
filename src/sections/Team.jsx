@@ -4,7 +4,7 @@ import { TEAM_MEMBERS, CLUB_INFO } from '../data/clubData';
 import { Github, Linkedin, Mail, Instagram, ShieldCheck, Award } from 'lucide-react';
 
 export default function Team() {
-  // On front (default), show ONLY faculties as requested
+  // Default active category: Faculty Leadership
   const [filter, setFilter] = useState('faculty');
 
   // Faculty mentors formatted with official profiles

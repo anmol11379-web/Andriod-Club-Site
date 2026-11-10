@@ -1,108 +1,103 @@
 # 🤖 Android Club — Official Showcase & Community Portal
 
-Official web application and showcase portal for **Android Club at VIT Bhopal University**. Features a cyber-brutalist tech aesthetic with smooth momentum scrolling, interactive mobile hardware showcase, domain hubs, hackathon archives, and a recruitment challenge portal.
+Welcome to the official web application and showcase portal for **Android Club at VIT Bhopal University**. This platform serves as the central hub for the club's technical domains, flagship hackathons, open-source engineering projects, leadership directory, and student recruitment.
 
 ---
 
-## 🌐 Live Deployment & Project Links
+## 🌐 Live Application & Links
 
-> **🚀 Live Deployed Version:** [https://andriod-club-site.netlify.app](https://andriod-club-site.netlify.app)  
-
-> 
-> **📦 Source Code Repository:** [https://github.com/anmol11379-web/Andriod-Club-Site](https://github.com/anmol11379-web/Andriod-Club-Site)  
-> **⚡ Hosting Platform:** Netlify (Continuous Deployment via GitHub)
+- **🚀 Live Production Website:** [https://andriod-club-site.netlify.app](https://andriod-club-site.netlify.app)
+- **📦 Source Code Repository:** [https://github.com/anmol11379-web/Andriod-Club-Site](https://github.com/anmol11379-web/Andriod-Club-Site)
+- **⚡ Deployment Platform:** Netlify (Continuous Deployment via GitHub)
 
 ---
 
-## 💻 Setup & Installation Instructions
+## 💻 Setup & Local Development
 
-Follow these step-by-step instructions to run the project locally on your machine:
+To clone, run, and explore this project on your local machine, follow these instructions:
 
 ### 1. Prerequisites
-Ensure you have the following installed on your machine:
 - **Node.js**: v18.0.0 or higher ([Download Node.js](https://nodejs.org/))
-- **npm**: v9.0.0 or higher (comes bundled with Node.js)
-- **Git**: Installed and configured ([Download Git](https://git-scm.com/))
+- **npm**: v9.0.0 or higher
+- **Git**: Installed on your system ([Download Git](https://git-scm.com/))
 
 ### 2. Clone the Repository
-Open your terminal and clone the repository:
 ```bash
 git clone https://github.com/anmol11379-web/Andriod-Club-Site.git
 cd Andriod-Club-Site
 ```
 
 ### 3. Install Dependencies
-Install all required project dependencies:
 ```bash
 npm install
 ```
 
-### 4. Run the Development Server
-Start the local development server with Hot Module Replacement (HMR):
+### 4. Start Local Development Server
 ```bash
 npm run dev
 ```
-Once started, open your browser and navigate to:
+Open your browser and navigate to:
 ```
 http://localhost:3000
 ```
+The development environment includes Hot Module Replacement (HMR) for instantaneous live reloading.
 
 ### 5. Build for Production
-To generate a production-ready, minified build in the `dist/` directory:
+To compile and minify the project for production:
 ```bash
 npm run build
 ```
+The compiled output is located in the `dist/` directory.
 
-### 6. Preview Production Build Locally
-To test the production build locally before deploying:
+### 6. Preview Production Build
+To preview the production bundle locally:
 ```bash
 npm run preview
 ```
 
 ---
 
-## ⚡ Tech Stack
+## ⚡ Tech Stack & Architecture
 
-- **Framework:** [React 18](https://react.dev/) + [Vite 6](https://vitejs.dev/)
-- **Styling:** [Tailwind CSS 3](https://tailwindcss.com/) with custom cyber-brutalist dark theme
-- **Smooth Scroll:** [Lenis](https://lenis.darkroom.engineering/) (hardware-accelerated touch & desktop scroll momentum)
-- **Icons:** [Lucide React](https://lucide.dev/)
-- **Micro-Interactions:** [Canvas Confetti](https://www.npmjs.com/package/canvas-confetti)
-- **Deployment & Routing:** [Netlify](https://www.netlify.com/) (configured via [`netlify.toml`](./netlify.toml) + [`public/_redirects`](./public/_redirects))
-
----
-
-## 🚀 Key Features
-
-- **System Boot Intro Loader:** Cyber-telemetry boot ramp with seamless dual-shutter curtain opening animation.
-- **Hardware Phone Zoom Showcase:** Hardware-accelerated (`requestAnimationFrame` LERP + direct GPU ref transforms) 3D device preview optimized for 120fps on mobile & Android devices.
-- **Collaborative Developer Cursors:** Live multi-track domain tags with interactive technical briefs.
-- **Domain & Project Hub:** Sourced from official repositories with category filters (Android Native, SDC, AI/ML, Cloud & IoT).
-- **Events & Hackathons:** Segmented timeline with live status pills and past competition archives.
-- **Core Leadership Grid:** Faculty coordinators, domain leads, and core contributors with direct profiles.
-- **Interactive Recruitment Dossier:** Full application form with live input validation and celebration feedback.
-- **Direct Lead Messaging:** In-page direct inquiry form with immediate status handling.
+- **Core Framework:** [React 18](https://react.dev/) + [Vite 6](https://vitejs.dev/)
+- **Styling:** [Tailwind CSS 3](https://tailwindcss.com/) with a custom cyber-brutalist dark aesthetic
+- **Scroll Acceleration:** [Lenis](https://lenis.darkroom.engineering/) configured for hardware-accelerated momentum
+- **Iconography:** [Lucide React](https://lucide.dev/)
+- **Interactive Micro-FX:** [Canvas Confetti](https://www.npmjs.com/package/canvas-confetti)
+- **Deployment Infrastructure:** [Netlify](https://www.netlify.com/) configured with [`netlify.toml`](./netlify.toml) and SPA redirects via [`public/_redirects`](./public/_redirects)
 
 ---
 
-## 📁 Project Structure
+## 🚀 Key Platform Features
+
+1. **System Boot Telemetry:** A simulated retro-cyber kernel bootloader with progress ramp and seamless dual-shutter curtain reveal.
+2. **Hardware 3D Phone Zoom:** Scroll-linked smartphone animation powered by `requestAnimationFrame` and direct GPU transforms, delivering a locked 120fps on both desktop and mobile devices.
+3. **Collaborative Developer Cursors:** Multiplayer domain track indicators highlighting active club disciplines (Android, SDC, AI/ML, Design, Cloud/IoT).
+4. **Domain & Project Hub:** Interactive showcase displaying active GitHub repositories and technical specializations.
+5. **Event Timeline & Archives:** Real-time event telemetry distinguishing between upcoming initiatives and past hackathon archives.
+6. **Core Leadership Grid:** Interactive roster categorizing faculty patrons, executive leads, domain architects, and core contributors.
+7. **Recruitment Challenge Dossier:** Application portal with real-time validation and interactive submission feedback.
+
+---
+
+## 📁 Repository Structure
 
 ```
-├── public/                      # Static assets & branding
-│   ├── AboutPage_Assets/        # Faculty & advisory portraits
-│   ├── events/                  # Authentic club hackathon & workshop media
-│   ├── Homepage_Assets/         # Quotes & 3D models
-│   ├── Logo.png                 # Primary Android Club badge
-│   ├── favicon.svg              # Crisp vector Android robot head icon
+├── public/                      # Static assets, branding & metadata
+│   ├── AboutPage_Assets/        # Faculty mentor & leadership media
+│   ├── events/                  # Authentic hackathon and workshop photography
+│   ├── Homepage_Assets/         # Quotes and 3D device models
+│   ├── Logo.png                 # Primary Android Club crest
+│   ├── favicon.svg              # Vector Android robot head icon
 │   ├── favicon.ico              # Multi-resolution ICO (16, 32, 48, 64)
 │   ├── apple-touch-icon.png     # iOS / macOS web clip icon
-│   └── _redirects               # SPA routing rule for Netlify
+│   └── _redirects               # Single-Page Application routing rule for Netlify
 ├── src/
-│   ├── components/              # Global UI elements
+│   ├── components/              # Shared UI components
 │   │   ├── Navbar.jsx           # Glassmorphic header with active section tracking
 │   │   ├── SectionHeader.jsx    # Monospace tags & display typography
 │   │   ├── PhoneMockup.jsx      # Android OS device UI frame
-│   │   ├── CollaborativeCursors.jsx # Interactive multiplayer dev cursors
+│   │   ├── CollaborativeCursors.jsx # Multiplayer developer cursors
 │   │   ├── WebsiteIntroLoader.jsx   # Boot sequence & shutter animation
 │   │   └── Footer.jsx           # Directory, socials & campus coordinates
 │   ├── sections/                # Page sections in scroll sequence
@@ -127,7 +122,7 @@ npm run preview
 │   ├── App.jsx                  # Main application orchestrator + Lenis loop
 │   ├── index.css                # Global cyber palette, button ripple & keyframes
 │   └── main.jsx                 # React root DOM mount
-├── index.html                   # Entry point with favicon suite & fonts
+├── index.html                   # HTML entry point with favicon suite & fonts
 ├── netlify.toml                 # Netlify build configuration & redirect rules
 ├── package.json                 # Dependencies and npm scripts
 ├── postcss.config.js            # PostCSS configuration for Tailwind
@@ -137,47 +132,25 @@ npm run preview
 
 ---
 
-## 🌐 Netlify Deployment Configuration
+## 📊 Data Layer Architecture
 
-This repository includes continuous deployment configuration out of the box:
-
-- **[`netlify.toml`](./netlify.toml):**
-  ```toml
-  [build]
-    command = "npm run build"
-    publish = "dist"
-
-  [build.environment]
-    NODE_VERSION = "20"
-
-  [[redirects]]
-    from = "/*"
-    to = "/index.html"
-    status = 200
-  ```
-- **[`public/_redirects`](./public/_redirects):** Guarantees zero 404s on page refresh.
-
----
-
-## 📝 Managing & Updating Content
-
-All text copy, team members, hackathons, open-source projects, and contact information are managed centrally in:
+The application strictly separates data from presentation. All dynamic content is centralized in:
 ```
 src/data/clubData.js
 ```
 
-| Export Constant | Purpose |
+| Export Constant | Description |
 | :--- | :--- |
-| `CLUB_INFO` | Club tagline, founding date, official handles & campus office hours |
-| `PROJECTS_DATA` | Open-source apps, stack tags, repo URLs & descriptions |
+| `CLUB_INFO` | Core club metadata, founding date, announcement banner, and official social handles |
+| `PROJECTS_DATA` | Open-source initiatives, technology stacks, GitHub repository links, and descriptions |
 | `EVENTS_DATA` | Hackathon cards, banners, status (`upcoming`/`past`), and dates |
-| `TEAM_MEMBERS` | Core team, domain leads, faculty coordinators & LinkedIn/GitHub |
-| `DOMAINS_DATA` | Technical and non-technical domain tracks & descriptions |
-| `FAQS` | Frequently asked questions in recruitment accordion |
+| `TEAM_MEMBERS` | Core contributors, domain leads, and faculty leadership profiles |
+| `DOMAINS_DATA` | Technical and non-technical domain tracks & curriculum scopes |
+| `FAQS` | Frequently asked questions regarding club inductions and activities |
 
 ---
 
-## 📜 Chapter & Licensing
+## 📜 Chapter Affiliation & License
 
 Developed and maintained by **Android Club, VIT Bhopal University**.  
-Built for the global developer ecosystem.
+Open to all students, builders, and mobile developers.

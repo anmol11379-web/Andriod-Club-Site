@@ -37,7 +37,7 @@ export default function Hero() {
         {/* Spacing */}
         <div className="h-6 md:h-8" />
 
-        {/* Massive Dual Display Heading (Cloned from v0 pixel perfect) */}
+        {/* Hero Display Typography */}
         <h1 className="font-grotesk text-[clamp(34px,7.5vw,90px)] font-bold text-[#F5F5F0] tracking-[-1px] md:tracking-[-2px] leading-[0.98] text-center w-full max-w-[1150px]">
           BUILD WITHOUT
           <br />

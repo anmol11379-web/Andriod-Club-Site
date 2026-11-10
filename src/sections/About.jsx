@@ -130,7 +130,7 @@ export default function About() {
           </div>
         </div>
 
-        {/* 4 Pillars Grid (Cloned Card Style from v0) */}
+        {/* Core Strategic Pillars */}
         <div>
           <div className="flex items-center gap-2 mb-4 font-mono text-xs text-[#888899]">
             <span className="w-1.5 h-1.5 bg-[#3DDC84]" />
