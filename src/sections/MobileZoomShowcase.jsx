@@ -179,7 +179,7 @@ export default function MobileZoomShowcase() {
         {/* Held 100% visible throughout reading zone so user can read */}
         {/* ========================================================= */}
         <div
-          className="absolute left-6 sm:left-12 md:left-20 top-24 sm:top-28 z-20 max-w-sm md:max-w-md pointer-events-none"
+          className="absolute left-4 sm:left-12 md:left-20 top-16 sm:top-24 md:top-28 z-20 max-w-[280px] sm:max-w-sm md:max-w-md pointer-events-none"
           style={{
             opacity: initialTextOpacity,
             transform: `translate3d(-${initialTextTranslateX}px, 0, 0)`,
@@ -187,7 +187,7 @@ export default function MobileZoomShowcase() {
           }}
         >
           {/* Tech Double Dots + Tag */}
-          <div className="flex items-center gap-1.5 mb-3">
+          <div className="flex items-center gap-1.5 mb-2 sm:mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
             <span className="w-1.5 h-1.5 rounded-full bg-[#3DDC84]" />
             <span className="font-mono text-[9px] text-[#3DDC84] tracking-[2px] ml-1 uppercase font-bold">
@@ -196,26 +196,26 @@ export default function MobileZoomShowcase() {
           </div>
 
           {/* Heading */}
-          <div className="relative border-l-2 border-[#3DDC84]/70 pl-4 py-1 mb-4">
-            <h2 className="font-grotesk text-[28px] sm:text-[38px] md:text-[46px] font-bold text-[#F5F5F0] leading-[1.05] tracking-tight">
+          <div className="relative border-l-2 border-[#3DDC84]/70 pl-3 sm:pl-4 py-0.5 sm:py-1 mb-2 sm:mb-4">
+            <h2 className="font-grotesk text-[20px] sm:text-[34px] md:text-[46px] font-bold text-[#F5F5F0] leading-[1.08] tracking-tight">
               Explore the Android Community
             </h2>
           </div>
 
           {/* Subtitle */}
-          <p className="font-sans text-[13px] sm:text-[14px] text-[#A1A1AA] leading-relaxed pl-4">
+          <p className="font-sans text-[11px] sm:text-[14px] text-[#A1A1AA] leading-relaxed pl-3 sm:pl-4 line-clamp-2 sm:line-clamp-none">
             Did you know? Android powers <strong className="text-[#3DDC84]">over 70% of smartphones worldwide</strong>, serving billions of users every single day.
           </p>
 
           {/* Badges */}
-          <div className="mt-5 pl-4 flex flex-wrap items-center gap-2.5">
-            <span className="font-mono text-[10px] text-[#888899] bg-[#14141E] px-2.5 py-1 border border-[#232332]">
+          <div className="mt-3 sm:mt-5 pl-3 sm:pl-4 flex flex-wrap items-center gap-1.5 sm:gap-2.5">
+            <span className="font-mono text-[9px] sm:text-[10px] text-[#888899] bg-[#14141E] px-2 py-0.5 sm:px-2.5 sm:py-1 border border-[#232332]">
               3.5B+ ACTIVE DEVICES
             </span>
-            <span className="font-mono text-[10px] text-[#00F0FF] bg-[#14141E] px-2.5 py-1 border border-[#232332]">
+            <span className="font-mono text-[9px] sm:text-[10px] text-[#00F0FF] bg-[#14141E] px-2 py-0.5 sm:px-2.5 sm:py-1 border border-[#232332]">
               KOTLIN FIRST
             </span>
-            <span className="font-mono text-[10px] text-[#3DDC84] bg-[#14141E] px-2.5 py-1 border border-[#232332]">
+            <span className="font-mono text-[9px] sm:text-[10px] text-[#3DDC84] bg-[#14141E] px-2 py-0.5 sm:px-2.5 sm:py-1 border border-[#232332] hidden sm:inline-block">
               OPEN ECOSYSTEM
             </span>
           </div>
@@ -281,7 +281,7 @@ export default function MobileZoomShowcase() {
 
           {/* Phone Hardware Chassis (dissolves as screen envelops viewport) */}
           <div 
-            className="relative w-[280px] sm:w-[320px] md:w-[340px] aspect-[9/19] bg-[#0c0c14] rounded-[48px] p-3.5 border-[3px] border-[#2c2c3d] shadow-[0_30px_90px_rgba(0,0,0,0.95)]"
+            className="relative w-[230px] sm:w-[290px] md:w-[340px] aspect-[9/19] bg-[#0c0c14] rounded-[42px] sm:rounded-[48px] p-2.5 sm:p-3.5 border-[2.5px] sm:border-[3px] border-[#2c2c3d] shadow-[0_30px_90px_rgba(0,0,0,0.95)]"
             style={{
               opacity: chassisOpacity,
               willChange: 'opacity'
@@ -413,9 +413,9 @@ export default function MobileZoomShowcase() {
         </div>
 
         {/* ========================================================= */}
-        {/* 5. RIGHT SIDE VERTICAL GALLERY RAIL                        */}
+        {/* 5. RIGHT SIDE VERTICAL GALLERY RAIL (hidden on mobile)     */}
         {/* ========================================================= */}
-        <div className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-3 select-none">
+        <div className="hidden sm:flex absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-40 flex-col items-center gap-3 select-none">
           <span className="font-mono text-[9px] text-[#888899] tracking-[2px] -rotate-90 origin-center mb-6">
             GALLERY
           </span>

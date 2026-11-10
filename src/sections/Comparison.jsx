@@ -13,8 +13,14 @@ export default function Comparison() {
           subtitle="How our engineering discipline, peer code review culture, and production standards differentiate our core developers from standard university student chapters."
         />
 
+        {/* Mobile Swipe Hint */}
+        <div className="flex sm:hidden items-center justify-between font-mono text-[10px] text-[#888899] px-1">
+          <span>SWIPE HORIZONTALLY TO COMPARE</span>
+          <span className="text-[#3DDC84]">⇄</span>
+        </div>
+
         {/* Comparison Matrix Table */}
-        <div className="w-full overflow-x-auto border border-[#232332] bg-[#0E0E16]">
+        <div className="w-full overflow-x-auto border border-[#232332] bg-[#0E0E16] touch-pan-x">
           <table className="w-full text-left border-collapse min-w-[640px]">
             <thead>
               <tr className="border-b border-[#232332] bg-[#14141E]">

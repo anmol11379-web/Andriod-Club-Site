@@ -20,6 +20,8 @@
 html {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
@@ -28,11 +30,22 @@ html, body {
   color: #F5F5F0;
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   overflow-x: clip;
+  touch-action: pan-y;
+  overscroll-behavior-y: none;
   background-image: 
     radial-gradient(rgba(61, 220, 132, 0.04) 1px, transparent 1px),
     radial-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px);
   background-size: 32px 32px;
   background-position: 0 0, 16px 16px;
+}
+
+/* Hide scrollbars on horizontal mobile swipe chip bars */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Custom Scrollbar */

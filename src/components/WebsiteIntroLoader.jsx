@@ -83,7 +83,7 @@ export default function WebsiteIntroLoader({ onComplete }) {
           }, 800);
         }
       }}
-      className={`fixed inset-0 z-[100] flex flex-col justify-between overflow-hidden cursor-pointer select-none transition-opacity duration-[950ms] ${
+      className={`fixed inset-0 z-[100] min-h-[100dvh] flex flex-col justify-between overflow-hidden cursor-pointer select-none transition-opacity duration-[950ms] touch-none ${
         isExiting ? 'pointer-events-none' : ''
       }`}
     >
@@ -182,7 +182,7 @@ export default function WebsiteIntroLoader({ onComplete }) {
 
         {/* Subtle Skip Hint */}
         <div className="mt-7 font-mono text-[9px] text-[#555566] tracking-[1px] uppercase hover:text-[#888899] transition-colors">
-          [CLICK ANYWHERE OR PRESS ANY KEY TO SKIP]
+          [TAP ANYWHERE OR PRESS ANY KEY TO SKIP]
         </div>
       </div>
     </div>

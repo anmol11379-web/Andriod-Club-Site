@@ -127,8 +127,8 @@ export default function Team() {
             subtitle="The visionary faculty mentors, student leads, organizers, and architects steering Android Club at VIT Bhopal University."
           />
 
-          {/* Section Navigation Tabs */}
-          <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-[#14141E] border border-[#232332] self-start md:self-auto max-w-full">
+          {/* Section Navigation Tabs - Horizontally swipeable on mobile */}
+          <div className="flex overflow-x-auto no-scrollbar sm:flex-wrap items-center gap-1.5 p-1.5 bg-[#14141E] border border-[#232332] w-full md:w-auto max-w-full touch-pan-x">
             {categories.map((c) => (
               <button
                 key={c.id}

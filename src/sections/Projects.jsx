@@ -31,8 +31,8 @@ export default function Projects() {
             subtitle="Explore our active GitHub projects, production utilities, and research prototypes engineered with industry-standard architectures."
           />
 
-          {/* Filter Pills */}
-          <div className="flex flex-wrap items-center gap-2 p-1 bg-[#14141E] border border-[#232332] self-start md:self-auto">
+          {/* Filter Pills - Swipeable on mobile */}
+          <div className="flex overflow-x-auto no-scrollbar sm:flex-wrap items-center gap-2 p-1 bg-[#14141E] border border-[#232332] w-full sm:w-auto max-w-full touch-pan-x">
             {categories.map((c) => (
               <button
                 key={c.id}

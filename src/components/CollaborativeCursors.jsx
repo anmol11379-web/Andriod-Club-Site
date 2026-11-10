@@ -69,7 +69,7 @@ export default function CollaborativeCursors() {
   if (!showCursors) return null;
 
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden z-20">
+    <div className="hidden md:block absolute inset-0 pointer-events-none overflow-hidden z-20">
       {/* Cursors Container */}
       {ANDROID_CURSORS.map((cursor) => (
         <div

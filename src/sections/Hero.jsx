@@ -26,10 +26,10 @@ export default function Hero() {
       <div className="absolute top-1/3 left-1/4 w-[300px] h-[300px] bg-[#00F0FF]/10 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="relative z-10 flex flex-col items-center w-full max-w-[1280px] mx-auto text-center">
-        {/* Top Announcement Pill (Cloned from v0: [NEW] // VERSION 2.0 NOW LIVE) */}
-        <div className="inline-flex items-center justify-center gap-2 h-8 px-3 sm:px-4 bg-[#14141E] border-2 border-[#3DDC84] shadow-[0_0_15px_rgba(61,220,132,0.2)]">
+        {/* Top Announcement Pill */}
+        <div className="inline-flex items-center justify-center gap-2 h-8 max-w-full px-3 sm:px-4 bg-[#14141E] border-2 border-[#3DDC84] shadow-[0_0_15px_rgba(61,220,132,0.2)]">
           <div className="w-2 h-2 bg-[#3DDC84] shrink-0 animate-blink" />
-          <span className="font-mono text-[9px] sm:text-[11px] font-bold text-[#3DDC84] tracking-[1.5px] whitespace-nowrap">
+          <span className="font-mono text-[9px] sm:text-[11px] font-bold text-[#3DDC84] tracking-[1.5px] truncate">
             {CLUB_INFO.announcement}
           </span>
         </div>

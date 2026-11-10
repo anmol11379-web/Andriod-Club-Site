@@ -23,15 +23,22 @@ import WebsiteIntroLoader from './components/WebsiteIntroLoader';
 
 export default function App() {
   useEffect(() => {
-    // 1. Initialize Lenis for silky smooth scrolling momentum
+    // Detect touch device for natural Android & mobile touch acceleration
+    const isTouch = typeof window !== 'undefined' && (
+      'ontouchstart' in window || 
+      navigator.maxTouchPoints > 0 || 
+      window.matchMedia('(pointer: coarse)').matches
+    );
+
+    // 1. Initialize Lenis: smooth wheel for desktop, natural 1:1 hardware momentum for touch
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: isTouch ? 0.8 : 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.05,
-      touchMultiplier: 1.8,
+      syncTouch: false,
+      touchMultiplier: 1.0,
     });
 
     let rafId;

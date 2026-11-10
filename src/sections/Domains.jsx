@@ -33,7 +33,7 @@ export default function Domains() {
           />
 
           {/* Track Switcher */}
-          <div className="flex items-center gap-2 p-1.5 bg-[#14141E] border border-[#232332] shrink-0 self-start md:self-auto">
+          <div className="flex items-center gap-2 p-1.5 bg-[#14141E] border border-[#232332] shrink-0 w-full sm:w-auto justify-center sm:justify-start">
             <button
               onClick={() => setActiveTab('tech')}
               className={`px-4 py-2 font-mono text-[11px] font-bold tracking-[1px] transition-all ${
